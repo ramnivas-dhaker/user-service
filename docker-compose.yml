@@ -9,20 +9,22 @@ networks:
 
 services:
   user:
+    container_name: user-service
     build:
       context: .
     ports:
-      - 8082:5000
+      - 5556:5556
     volumes:
       - ./app:/app
     depends_on:
       - user_db
-    restart: always
+    restart: on-failure
     networks:
       - user-network
 
   user_db:
-    image: mysql:5.7.22
+    container_name: user_db
+    image: mysql:5.7
     volumes:
       - user-db-data:/var/lib/mysql
     environment:
@@ -31,3 +33,5 @@ services:
     restart: always
     networks:
       - user-network
+    ports:
+      - "13306:3306"
